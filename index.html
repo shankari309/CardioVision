@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Vision - Video Analysis</title>
+    <style>
+        body {
+            background-color: #121212; /* Dark theme background color */
+            color: #ffffff; /* Light text color */
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #29b6f6; /* Accent color for headings */
+        }
+
+        #content {
+            display: flex;
+            width: 80%;
+            margin-top: 50px;
+            justify-content: space-between;
+        }
+
+        #form-section,
+        #result-section {
+            width: 45%;
+            margin: 20px;
+        }
+
+        #result-section {
+            text-align: left; /* Align the text to the left in the result section */
+            padding: 20px;
+            background-color: #263238; /* Result section background color */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for depth */
+        }
+
+        #result-section h2 {
+            color: #29b6f6; /* Accent color for result section headings */
+        }
+
+        #result-section p {
+            color: #ffffff; /* Light text color */
+            margin-bottom: 10px;
+        }
+
+        .result-box {
+            background-color: #1f1f1f; /* Box background color */
+            border: 1px solid #29b6f6; /* Accent color for border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Padding inside the box */
+            margin-bottom: 10px;
+        }
+
+        .label-ef {
+            color: #29b6f6; /* Accent color for EF label */
+        }
+
+        .label-edv {
+            color: #ff4081; /* Accent color for EDV label */
+        }
+
+        .label-esv {
+            color: #76ff03; /* Accent color for ESV label */
+        }
+        .label-status {
+            color: #76ff03; /* Accent color for ESV label */
+            text-align: center;
+
+        }
+
+        #upload-format-section,
+        #user-info-section {
+            width: 100%;
+            margin: 20px;
+        }
+
+        #form-section h2,
+        #upload-format-section h2,
+        #user-info-section h2,
+        form h2 {
+            color: #29b6f6; /* Accent color for section headings */
+        }
+
+        #form-section p,
+        #upload-format-section p,
+        #user-info-section p,
+        form p {
+            max-width: 600px;
+            margin: 20px auto;
+            line-height: 1.6;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li::before {
+            content: "•"; /* Bullet character */
+            color: #29b6f6; /* Accent color for bullet */
+            font-size: 1.5em;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form label {
+            margin: 10px 0;
+            color: #29b6f6; /* Accent color for labels */
+        }
+
+        form input {
+            padding: 8px;
+            margin: 5px 0;
+            width: 80%;
+            box-sizing: border-box;
+            border: 1px solid #29b6f6; /* Accent color for border */
+            border-radius: 5px;
+            background-color: #121212; /* Dark theme background color */
+            color: #ffffff; /* Light text color */
+        }
+
+        form input[type="submit"] {
+            background-color: #29b6f6; /* Accent color for submit button */
+            color: #ffffff; /* Light text color */
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0d8bf6; /* Darker accent color for hover effect */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>EchoVision</h1>
+
+    <div id="content">
+        <div id="form-section">
+            <form method="post" enctype="multipart/form-data">
+                <h2>Upload Details </h2>
+                <label for="name">Name</label>
+                <input type="text" name="name" required>
+                <label for="age">Age</label>
+                <input type="text" name="age" required>
+                <label for="gender">Gender</label>
+                <input type="text" name="gender" required>
+                <label for="video">Upload Video (MP4 or AVI format):</label>
+                <input type="file" name="video" accept="video/mp4,video/avi" required>
+                <input type="submit" value="Analyze">
+            </form>
+        </div>
+
+        <div id="result-section">
+            {% if result %}
+                <h2>Result</h2>
+                <div class="result-box">
+                    <p class="label-ef">EF:</p>
+                    <p>{{ result.EF }}%</p>
+                </div>
+                <div class="result-box">
+                    <p class="label-edv">EDV:</p>
+                    <p>{{ result.EDV }}</p>
+                </div>
+                <div class="result-box">
+                    <p class="label-esv">ESV:</p>
+                    <p>{{ result.ESV }}</p>
+                </div>
+                <div class="result-box">
+                    
+                    <p class="label-status"><strong>{{ result.EF_Status }}</strong></p>
+                </div>
+                <!-- Add more details or styling as needed -->
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="user-info-section">
+        <h2>User Information</h2>
+        <p>Provide your details to enhance your Echo Vision experience. Your information is securely handled for personalized insights.</p>
+    </div>
+
+    <div id="upload-format-section">
+        <h2>Supported Video Formats</h2>
+        <p>We currently support videos in MP4 or AVI format for analysis. Ensure your uploaded video is in one of the specified formats to experience the full capabilities of Echo Vision.</p>
+    </div>
+
+</body>
+
+</html>
